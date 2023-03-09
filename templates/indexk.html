@@ -1,0 +1,76 @@
+ {% extends 'main.html' %}
+ 
+ {% block left %}
+<div class="left_topic" >
+ {% for topic in topics %}
+ <div>
+ <b><a href="{% url 'home' %}?q={{topic.name}}" style="color:#fff" class="btn-primary ">#{{topic}}</a></b>
+ 
+ </div>
+ {%endfor%}
+</div>
+ 
+ {% endblock%}
+
+ {% block content %}
+ <div class="input-group mb-3 w-3">
+  
+  
+  <input type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Whats your doubt">
+</div>
+
+   
+
+  <a href="{% url 'createRoom'%}"  class="btn btn-secondary"/>Create Room</a>
+ 
+
+ <hr>
+ <b><h5> Rooms Available {{room_count}}</h5></b>
+ {% for room in rooms%}
+ 
+ <a href="{% url 'room' room.id%}" class="card-link">{{room.description}}</a><br>
+<div style=" display: flex;
+justify-content: space-between;
+">
+      <a href="{% url 'Userprofile' room.host.id%}">@{{room.host.username}}</a> <p style="text-size:5px">{{room.created|timesince}}</p>
+        
+</div>
+
+      {%if request.user == room.host%}
+      <a href="{% url 'deleteRoom' room.id%}" class="card-link">Delete Room</a>
+      <a href="{% url 'updateRoom' room.id%}" class="card-link">Update Room</a>
+      {%endif%}
+
+<br/><hr/>
+
+
+{% endfor %}
+
+{% endblock %}
+
+  {% block right %}
+ <b> <p class="font-weight-bold">RECENT ACTIVITES</p></b>
+
+
+  {% for messages in room_messages%}
+  <div>
+    <p class="font-weight-small">{{messages.body}}</p>
+
+      
+    </div>
+    <div style=" display: flex;
+    justify-content: space-between;
+    ">
+  <p class="font-weight-light">@{{messages.user}}.</p>
+  <p>{{messages.created|timesince}}
+    <p>{{messages.topic}}
+
+  </div>
+  
+    <hr>
+  {%endfor%}
+  {% endblock %}
+
+
+
+
